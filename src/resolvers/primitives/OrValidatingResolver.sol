@@ -9,7 +9,11 @@ import {EnumerableValidatingResolverSet} from "../../utils/EnumerableValidatingR
 import {IValidatingResolver} from "../../interfaces/IValidatingResolver.sol";
 import {IOrValidatingResolver} from "./interfaces/IOrValidatingResolver.sol";
 
-contract OrValidatingResolver is Ownable2Step, IValidatingResolver, IOrValidatingResolver {
+contract OrValidatingResolver is
+    Ownable2Step,
+    IValidatingResolver,
+    IOrValidatingResolver
+{
     using EnumerableValidatingResolverSet for EnumerableValidatingResolverSet.Set;
 
     ////////////////////////////// State //////////////////////////////
