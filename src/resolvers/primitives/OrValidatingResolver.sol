@@ -7,7 +7,7 @@ import {Attestation} from "eas-contracts/IEAS.sol";
 
 import {EnumerableValidatingResolverSet} from "../../utils/EnumerableValidatingResolverSet.sol";
 import {IValidatingResolver} from "../../interfaces/IValidatingResolver.sol";
-import {IOrValidatingResolver} from "../interfaces/IOrValidatingResolver.sol";
+import {IOrValidatingResolver} from "./interfaces/IOrValidatingResolver.sol";
 
 contract OrValidatingResolver is Ownable2Step, IValidatingResolver, IOrValidatingResolver {
     using EnumerableValidatingResolverSet for EnumerableValidatingResolverSet.Set;

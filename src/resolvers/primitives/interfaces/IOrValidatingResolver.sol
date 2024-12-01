@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.23;
 
-import {IValidatingResolver} from "../../interfaces/IValidatingResolver.sol";
+import {IValidatingResolver} from "../../../interfaces/IValidatingResolver.sol";
 
 interface IOrValidatingResolver is IValidatingResolver {
     ////////////////////////////// Events //////////////////////////////
