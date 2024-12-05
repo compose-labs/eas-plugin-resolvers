@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.23;
+pragma solidity 0.8.27;
 
 import {PluginResolver} from "../PluginResolver.sol";
 
@@ -24,12 +24,13 @@ contract PluginResolverFactory {
     /// @return The newly deployed PluginResolver contract
     function deploy(
         address _owner,
-        bytes32 _salt
+        bytes32 _salt,
+        address _eas
     ) external returns (PluginResolver) {
         if (_owner == address(0)) {
             _owner = msg.sender;
         }
-        PluginResolver resolver = new PluginResolver{salt: _salt}(_owner);
+        PluginResolver resolver = new PluginResolver{salt: _salt}(_owner, _eas);
         contracts.push(resolver);
         emit ResolverDeployed(msg.sender, _owner, resolver);
         return resolver;

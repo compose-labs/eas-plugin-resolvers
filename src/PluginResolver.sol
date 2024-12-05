@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.23;
+pragma solidity 0.8.27;
 
 import {Ownable, Ownable2Step} from "@openzeppelin/contracts/access/Ownable2Step.sol";
 import {SchemaResolver} from "eas-contracts/resolver/SchemaResolver.sol";
 import {IEAS, Attestation} from "eas-contracts/IEAS.sol";
 
-import {Predeploys} from "./libraries/Predeploys.sol";
 import {EnumerableValidatingResolverSet} from "./utils/EnumerableValidatingResolverSet.sol";
 import {EnumerableExecutingResolverSet} from "./utils/EnumerableExecutingResolverSet.sol";
 import {IValidatingResolver} from "./interfaces/IValidatingResolver.sol";
@@ -36,8 +35,9 @@ contract PluginResolver is Ownable2Step, SchemaResolver, IPluginResolver {
      * @param _owner The address of the owner of the PluginResolver
      */
     constructor(
-        address _owner
-    ) SchemaResolver(IEAS(Predeploys.EAS)) Ownable(_owner) {}
+        address _owner,
+        address _eas
+    ) SchemaResolver(IEAS(_eas)) Ownable(_owner) {}
 
     ////////////////////////////// External Functions //////////////////////////////
 

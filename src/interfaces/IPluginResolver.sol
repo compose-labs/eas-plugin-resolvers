@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.23;
+pragma solidity 0.8.27;
 
 import {ISchemaResolver} from "eas-contracts/resolver/ISchemaResolver.sol";
 
@@ -18,7 +18,7 @@ interface IPluginResolver is ISchemaResolver {
     /// @notice Emitted when an executing resolver fails.
     event ExecutingResolverFailed(
         IExecutingResolver indexed resolver,
-        bool isAttestation
+        bool indexed isAttestation
     );
 
     /// @notice Emitted when a validating resolver is added.
