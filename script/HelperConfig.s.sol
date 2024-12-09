@@ -92,7 +92,8 @@ contract HelperConfig is CodeConstants, Script {
         // Create the plugin resolver
         PluginResolver resolver = new PluginResolver(
             FOUNDRY_DEFAULT_SENDER, // Owner of the resolver
-            address(_eas) // Address of the EAS contract
+            address(_eas), // Address of the EAS contract
+            true // Catch executing resolver errors
         );
 
         // Register the schema with the registry and get its UID

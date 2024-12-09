@@ -27,19 +27,33 @@ contract PluginResolver is Ownable2Step, SchemaResolver, IPluginResolver {
     EnumerableValidatingResolverSet.Set private s_validatingResolvers;
     // array of executing resolvers
     EnumerableExecutingResolverSet.Set private s_executingResolvers;
+    // flag to catch or not catch errors from executing resolvers
+    bool private s_catchExecutingResolverErrors;
 
     ////////////////////////////// Constructor //////////////////////////////
 
     /**
      * @notice Constructor for PluginResolver
      * @param _owner The address of the owner of the PluginResolver
+     * @param _catchExecutingResolverErrors Flag to catch or not catch errors from executing resolvers
      */
     constructor(
         address _owner,
-        address _eas
-    ) SchemaResolver(IEAS(_eas)) Ownable(_owner) {}
+        address _eas,
+        bool _catchExecutingResolverErrors
+    ) SchemaResolver(IEAS(_eas)) Ownable(_owner) {
+        s_catchExecutingResolverErrors = _catchExecutingResolverErrors;
+    }
 
     ////////////////////////////// External Functions //////////////////////////////
+
+    /// @inheritdoc IPluginResolver
+    function setCatchExecutingResolverErrors(
+        bool catchErrors
+    ) external onlyOwner {
+        s_catchExecutingResolverErrors = catchErrors;
+        emit CatchExecutingResolverErrorsSet(catchErrors);
+    }
 
     /// @inheritdoc IPluginResolver
     function addValidatingResolver(
@@ -167,11 +181,19 @@ contract PluginResolver is Ownable2Step, SchemaResolver, IPluginResolver {
         // iterate over executingResolvers and call onAttest on each
         uint256 executingResolversLength = s_executingResolvers.length();
         for (uint256 i = 0; i < executingResolversLength; i++) {
-            try s_executingResolvers.at(i).onAttest(attestation, value) {
-                // Execution successful, continue to the next resolver
-            } catch {
-                // Emit event with the address of the failed executing resolver
-                emit ExecutingResolverFailed(s_executingResolvers.at(i), true);
+            if (s_catchExecutingResolverErrors) {
+                try s_executingResolvers.at(i).onAttest(attestation, value) {
+                    // Execution successful, continue to the next resolver
+                } catch {
+                    // Emit event with the address of the failed executing resolver
+                    emit ExecutingResolverFailed(
+                        s_executingResolvers.at(i),
+                        true
+                    );
+                }
+            } else {
+                // Don't catch errors, let them bubble up
+                s_executingResolvers.at(i).onAttest(attestation, value);
             }
         }
         return true;
@@ -197,11 +219,19 @@ contract PluginResolver is Ownable2Step, SchemaResolver, IPluginResolver {
         // iterate over executingResolvers and call onRevoke on each
         uint256 executingResolversLength = s_executingResolvers.length();
         for (uint256 i = 0; i < executingResolversLength; i++) {
-            try s_executingResolvers.at(i).onRevoke(attestation, value) {
-                // Execution successful, continue to the next resolver
-            } catch {
-                // Emit event with the address of the failed executing resolver
-                emit ExecutingResolverFailed(s_executingResolvers.at(i), false);
+            if (s_catchExecutingResolverErrors) {
+                try s_executingResolvers.at(i).onRevoke(attestation, value) {
+                    // Execution successful, continue to the next resolver
+                } catch {
+                    // Emit event with the address of the failed executing resolver
+                    emit ExecutingResolverFailed(
+                        s_executingResolvers.at(i),
+                        false
+                    );
+                }
+            } else {
+                // Don't catch errors, let them bubble up
+                s_executingResolvers.at(i).onRevoke(attestation, value);
             }
         }
         return true;

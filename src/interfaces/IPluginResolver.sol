@@ -33,6 +33,10 @@ interface IPluginResolver is ISchemaResolver {
     /// @notice Emitted when an executing resolver is removed.
     event ExecutingResolverRemoved(IExecutingResolver indexed resolver);
 
+    /// @notice Emitted when the catch executing resolver errors flag is set
+    /// @param catchErrors The new value of the flag
+    event CatchExecutingResolverErrorsSet(bool catchErrors);
+
     ////////////////////////////// Errors //////////////////////////////
 
     error PluginResolver__IndexOutOfBounds(uint256 index, uint256 length);
@@ -40,6 +44,10 @@ interface IPluginResolver is ISchemaResolver {
     error PluginResolver__DuplicateResolver(address resolver);
 
     ////////////////////////////// Functions //////////////////////////////
+
+    /// @notice Sets whether to catch executing resolver errors
+    /// @param catchErrors Whether to catch executing resolver errors
+    function setCatchExecutingResolverErrors(bool catchErrors) external;
 
     /// @notice Adds a validating resolver to the array
     /// @param resolver The resolver to add
