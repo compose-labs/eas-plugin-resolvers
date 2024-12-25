@@ -15,7 +15,7 @@ import {IExecutingResolver} from "./IExecutingResolver.sol";
 interface IPluginResolver is ISchemaResolver {
     ////////////////////////////// Events //////////////////////////////
 
-    /// @notice Emitted when an executing resolver fails.
+    /// @notice Emitted when an executing resolver fails, but the error is caught
     event ExecutingResolverFailed(
         IExecutingResolver indexed resolver,
         bool indexed isAttestation
@@ -48,6 +48,10 @@ interface IPluginResolver is ISchemaResolver {
     /// @notice Sets whether to catch executing resolver errors
     /// @param catchErrors Whether to catch executing resolver errors
     function setCatchExecutingResolverErrors(bool catchErrors) external;
+
+    /// @notice Returns whether to catch executing resolver errors
+    /// @return Whether to catch executing resolver errors
+    function getCatchExecutingResolverErrors() external view returns (bool);
 
     /// @notice Adds a validating resolver to the array
     /// @param resolver The resolver to add

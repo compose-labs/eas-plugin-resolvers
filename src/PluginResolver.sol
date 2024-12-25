@@ -102,6 +102,11 @@ contract PluginResolver is Ownable2Step, SchemaResolver, IPluginResolver {
     }
 
     /// @inheritdoc IPluginResolver
+    function getCatchExecutingResolverErrors() external view returns (bool) {
+        return s_catchExecutingResolverErrors;
+    }
+
+    /// @inheritdoc IPluginResolver
     function getValidatingResolversLength() external view returns (uint256) {
         return s_validatingResolvers.length();
     }
