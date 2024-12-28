@@ -18,7 +18,12 @@ import {IPluginResolver} from "./interfaces/IPluginResolver.sol";
  * @author Kyle Kaplan
  * @dev PluginResolver to add an array of validating and executing resolver contracts onAttest and onRevoke
  */
-contract PluginResolver is Semver, Ownable2Step, SchemaResolver, IPluginResolver {
+contract PluginResolver is
+    Semver,
+    Ownable2Step,
+    SchemaResolver,
+    IPluginResolver
+{
     using EnumerableValidatingResolverSet for EnumerableValidatingResolverSet.Set;
     using EnumerableExecutingResolverSet for EnumerableExecutingResolverSet.Set;
 
