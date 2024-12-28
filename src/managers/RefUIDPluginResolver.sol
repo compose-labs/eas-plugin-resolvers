@@ -7,6 +7,7 @@ import {IEAS, Attestation} from "eas-contracts/IEAS.sol";
 
 import {PluginResolver} from "../PluginResolver.sol";
 import {IRefUIDPluginResolver} from "./interfaces/IRefUIDPluginResolver.sol";
+import {Semver} from "../utils/Semver.sol";
 
 /**
  * @title RefUIDPluginResolver
@@ -23,7 +24,7 @@ import {IRefUIDPluginResolver} from "./interfaces/IRefUIDPluginResolver.sol";
  *          - They create a PluginResolver for that product, and call the setRefUIDToPluginResolver function on the order schema resolver (this contract) to set the PluginResolver for their product's orders
  *          - Order attestations reference product attestations and the appropriate PluginResolver is used to validate and execute the order
  */
-contract RefUIDPluginResolver is SchemaResolver, IRefUIDPluginResolver {
+contract RefUIDPluginResolver is Semver, SchemaResolver, IRefUIDPluginResolver {
     ////////////////////////////// State //////////////////////////////
 
     // the schemaUID that this resolver is intended to be set on
@@ -36,7 +37,7 @@ contract RefUIDPluginResolver is SchemaResolver, IRefUIDPluginResolver {
 
     ////////////////////////////// Constructor //////////////////////////////
 
-    constructor(address _eas) SchemaResolver(IEAS(_eas)) {}
+    constructor(address _eas) Semver(0, 0, 1) SchemaResolver(IEAS(_eas)) {}
 
     ////////////////////////////// External Functions //////////////////////////////
 
