@@ -6,6 +6,7 @@ import {Ownable, Ownable2Step} from "@openzeppelin/contracts/access/Ownable2Step
 import {SchemaResolver} from "eas-contracts/resolver/SchemaResolver.sol";
 import {IEAS, Attestation} from "eas-contracts/IEAS.sol";
 
+import {Semver} from "./utils/Semver.sol";
 import {EnumerableValidatingResolverSet} from "./utils/EnumerableValidatingResolverSet.sol";
 import {EnumerableExecutingResolverSet} from "./utils/EnumerableExecutingResolverSet.sol";
 import {IValidatingResolver} from "./interfaces/IValidatingResolver.sol";
@@ -17,7 +18,7 @@ import {IPluginResolver} from "./interfaces/IPluginResolver.sol";
  * @author Kyle Kaplan
  * @dev PluginResolver to add an array of validating and executing resolver contracts onAttest and onRevoke
  */
-contract PluginResolver is Ownable2Step, SchemaResolver, IPluginResolver {
+contract PluginResolver is Semver, Ownable2Step, SchemaResolver, IPluginResolver {
     using EnumerableValidatingResolverSet for EnumerableValidatingResolverSet.Set;
     using EnumerableExecutingResolverSet for EnumerableExecutingResolverSet.Set;
 
@@ -41,7 +42,7 @@ contract PluginResolver is Ownable2Step, SchemaResolver, IPluginResolver {
         address _owner,
         address _eas,
         bool _catchExecutingResolverErrors
-    ) SchemaResolver(IEAS(_eas)) Ownable(_owner) {
+    ) Semver(0, 0, 1) SchemaResolver(IEAS(_eas)) Ownable(_owner) {
         s_catchExecutingResolverErrors = _catchExecutingResolverErrors;
     }
 
