@@ -14,7 +14,7 @@ import {IRefUIDPluginResolver} from "./interfaces/IRefUIDPluginResolver.sol";
  *      A PluginResolver can only be set for a refUID by the referenced attestation attester.
  *      This contract is not owned and is meant to be immutable so that the schema connected to this resolver is credibly neutral.
  *      To protect against abuse, the setRefUIDToPluginResolver function can only be called by the attester of the referenced attestation.
- *      Remember that a PluginResolver is ownable
+ *      Remember that a PluginResolver is ownable and the installed plugins can be changed by the owner.
  *      This allows a schema to be created once, but re-used with many different resolvers (assuming attestations are indended to reference another attestation)
  *      For example:
  *          - A schema is created for a product
