@@ -16,10 +16,7 @@ interface IPluginResolver is ISchemaResolver {
     ////////////////////////////// Events //////////////////////////////
 
     /// @notice Emitted when an executing resolver fails, but the error is caught
-    event ExecutingResolverFailed(
-        IExecutingResolver indexed resolver,
-        bool indexed isAttestation
-    );
+    event ExecutingResolverFailed(IExecutingResolver indexed resolver, bool indexed isAttestation);
 
     /// @notice Emitted when a validating resolver is added.
     event ValidatingResolverAdded(IValidatingResolver indexed resolver);
@@ -68,9 +65,7 @@ interface IPluginResolver is ISchemaResolver {
     /// @notice Returns the validating resolver at the given index
     /// @param index The index of the resolver to return
     /// @return The validating resolver at the given index
-    function getValidatingResolverAt(
-        uint256 index
-    ) external view returns (IValidatingResolver);
+    function getValidatingResolverAt(uint256 index) external view returns (IValidatingResolver);
 
     /// @notice Adds an executing resolver to the array
     /// @param resolver The resolver to add
@@ -87,7 +82,5 @@ interface IPluginResolver is ISchemaResolver {
     /// @notice Returns the executing resolver at the given index
     /// @param index The index of the resolver to return
     /// @return The executing resolver at the given index
-    function getExecutingResolverAt(
-        uint256 index
-    ) external view returns (IExecutingResolver);
+    function getExecutingResolverAt(uint256 index) external view returns (IExecutingResolver);
 }

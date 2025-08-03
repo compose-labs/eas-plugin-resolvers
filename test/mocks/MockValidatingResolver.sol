@@ -23,4 +23,4 @@ contract MockValidatingResolver is IValidatingResolver {
     function onRevoke(Attestation calldata, uint256) external view returns (bool) {
         return shouldValidate;
     }
-} 
+}

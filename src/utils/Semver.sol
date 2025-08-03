@@ -31,15 +31,8 @@ contract Semver is ISemver {
     /// @notice Returns the full semver contract version.
     /// @return Semver contract version as a string.
     function getVersion() external view returns (string memory) {
-        return
-            string(
-                abi.encodePacked(
-                    Strings.toString(I_MAJOR),
-                    ".",
-                    Strings.toString(I_MINOR),
-                    ".",
-                    Strings.toString(I_PATCH)
-                )
-            );
+        return string(
+            abi.encodePacked(Strings.toString(I_MAJOR), ".", Strings.toString(I_MINOR), ".", Strings.toString(I_PATCH))
+        );
     }
 }

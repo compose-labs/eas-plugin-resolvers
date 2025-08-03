@@ -15,28 +15,16 @@ interface IRefUidPluginResolver is ISchemaResolver {
     ////////////////////////////// Events //////////////////////////////
 
     /// @notice Emitted when the refUid to pluginResolver mapping is set
-    event RefUidToPluginResolverSet(
-        bytes32 indexed refUid,
-        PluginResolver indexed pluginResolver
-    );
+    event RefUidToPluginResolverSet(bytes32 indexed refUid, PluginResolver indexed pluginResolver);
 
     /// @notice Emitted when an executing resolver fails, but the error is caught
-    event ExecutingResolverFailed(
-        IExecutingResolver indexed resolver,
-        bool indexed isAttestation
-    );
+    event ExecutingResolverFailed(IExecutingResolver indexed resolver, bool indexed isAttestation);
 
     ////////////////////////////// Errors //////////////////////////////
 
-    error RefUidPluginResolver__InvalidSchema(
-        bytes32 providedSchema,
-        bytes32 expectedSchema
-    );
+    error RefUidPluginResolver__InvalidSchema(bytes32 providedSchema, bytes32 expectedSchema);
 
-    error RefUidPluginResolver__Unauthorized(
-        address providedSender,
-        address expectedSender
-    );
+    error RefUidPluginResolver__Unauthorized(address providedSender, address expectedSender);
 
     error RefUidPluginResolver__SchemaUidAlreadySet();
 
@@ -49,8 +37,5 @@ interface IRefUidPluginResolver is ISchemaResolver {
     /// @notice Sets the refUid to the pluginResolver
     /// @param refUid The refUid to set
     /// @param pluginResolver The pluginResolver to set
-    function setRefUidToPluginResolver(
-        bytes32 refUid,
-        PluginResolver pluginResolver
-    ) external;
+    function setRefUidToPluginResolver(bytes32 refUid, PluginResolver pluginResolver) external;
 }

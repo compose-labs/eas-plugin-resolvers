@@ -9,11 +9,7 @@ import {EnumerableValidatingResolverSet} from "../../utils/EnumerableValidatingR
 import {IValidatingResolver} from "../../interfaces/IValidatingResolver.sol";
 import {IOrValidatingResolver} from "./interfaces/IOrValidatingResolver.sol";
 
-contract OrValidatingResolver is
-    Ownable2Step,
-    IValidatingResolver,
-    IOrValidatingResolver
-{
+contract OrValidatingResolver is Ownable2Step, IValidatingResolver, IOrValidatingResolver {
     using EnumerableValidatingResolverSet for EnumerableValidatingResolverSet.Set;
 
     ////////////////////////////// State //////////////////////////////
@@ -26,9 +22,7 @@ contract OrValidatingResolver is
 
     ////////////////////////////// External Functions //////////////////////////////
 
-    function addValidatingResolver(
-        IValidatingResolver _resolver
-    ) external onlyOwner {
+    function addValidatingResolver(IValidatingResolver _resolver) external onlyOwner {
         if (address(_resolver) == address(0)) {
             revert OrValidatingResolver__InvalidResolver(address(_resolver));
         }
@@ -38,19 +32,14 @@ contract OrValidatingResolver is
         emit ValidatingResolverAdded(_resolver);
     }
 
-    function removeValidatingResolver(
-        IValidatingResolver _resolver
-    ) external onlyOwner {
+    function removeValidatingResolver(IValidatingResolver _resolver) external onlyOwner {
         if (!s_validatingResolvers.remove(_resolver)) {
             revert OrValidatingResolver__InvalidResolver(address(_resolver));
         }
         emit ValidatingResolverRemoved(_resolver);
     }
 
-    function onAttest(
-        Attestation calldata attestation,
-        uint256 value
-    ) external returns (bool) {
+    function onAttest(Attestation calldata attestation, uint256 value) external returns (bool) {
         // iterate over validatingResolvers and call onAttest on each, if any passes, return true
         uint256 validatingResolversLength = s_validatingResolvers.length();
         for (uint256 i = 0; i < validatingResolversLength; i++) {
@@ -61,10 +50,7 @@ contract OrValidatingResolver is
         return false;
     }
 
-    function onRevoke(
-        Attestation calldata attestation,
-        uint256 value
-    ) external returns (bool) {
+    function onRevoke(Attestation calldata attestation, uint256 value) external returns (bool) {
         // iterate over validatingResolvers and call onRevoke on each, if any passes, return true
         uint256 validatingResolversLength = s_validatingResolvers.length();
         for (uint256 i = 0; i < validatingResolversLength; i++) {

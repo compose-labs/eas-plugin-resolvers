@@ -4,7 +4,12 @@ pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";
 import {EAS, Attestation} from "eas-contracts/EAS.sol";
-import {AttestationRequest, RevocationRequest, AttestationRequestData, RevocationRequestData} from "eas-contracts/IEAS.sol";
+import {
+    AttestationRequest,
+    RevocationRequest,
+    AttestationRequestData,
+    RevocationRequestData
+} from "eas-contracts/IEAS.sol";
 
 import {PluginResolver} from "../src/PluginResolver.sol";
 import {IValidatingResolver} from "../src/interfaces/IValidatingResolver.sol";
@@ -30,22 +35,9 @@ contract PluginResolverTest is Test {
     event ValidatingResolverRemoved(address indexed resolver);
     event ExecutingResolverAdded(address indexed resolver);
     event ExecutingResolverRemoved(address indexed resolver);
-    event ExecutingResolverFailed(
-        IExecutingResolver indexed resolver,
-        bool indexed isAttestation
-    );
-    event Attested(
-        address indexed recipient,
-        address indexed attester,
-        bytes32 uid,
-        bytes32 indexed schemaUid
-    );
-    event Revoked(
-        address indexed recipient,
-        address indexed attester,
-        bytes32 uid,
-        bytes32 indexed schemaUid
-    );
+    event ExecutingResolverFailed(IExecutingResolver indexed resolver, bool indexed isAttestation);
+    event Attested(address indexed recipient, address indexed attester, bytes32 uid, bytes32 indexed schemaUid);
+    event Revoked(address indexed recipient, address indexed attester, bytes32 uid, bytes32 indexed schemaUid);
 
     function setUp() public {
         owner = makeAddr("owner");
@@ -79,10 +71,7 @@ contract PluginResolverTest is Test {
         pluginResolver.addValidatingResolver(validatingResolver1);
 
         assertEq(pluginResolver.getValidatingResolversLength(), 1);
-        assertEq(
-            address(pluginResolver.getValidatingResolverAt(0)),
-            address(validatingResolver1)
-        );
+        assertEq(address(pluginResolver.getValidatingResolverAt(0)), address(validatingResolver1));
 
         vm.stopPrank();
     }
@@ -92,10 +81,7 @@ contract PluginResolverTest is Test {
         pluginResolver.addValidatingResolver(validatingResolver1);
 
         vm.expectRevert(
-            abi.encodeWithSignature(
-                "PluginResolver__DuplicateResolver(address)",
-                address(validatingResolver1)
-            )
+            abi.encodeWithSignature("PluginResolver__DuplicateResolver(address)", address(validatingResolver1))
         );
         pluginResolver.addValidatingResolver(validatingResolver1);
 
@@ -123,10 +109,7 @@ contract PluginResolverTest is Test {
         pluginResolver.addExecutingResolver(executingResolver1);
 
         assertEq(pluginResolver.getExecutingResolversLength(), 1);
-        assertEq(
-            address(pluginResolver.getExecutingResolverAt(0)),
-            address(executingResolver1)
-        );
+        assertEq(address(pluginResolver.getExecutingResolverAt(0)), address(executingResolver1));
 
         vm.stopPrank();
     }
@@ -136,10 +119,7 @@ contract PluginResolverTest is Test {
         pluginResolver.addExecutingResolver(executingResolver1);
 
         vm.expectRevert(
-            abi.encodeWithSignature(
-                "PluginResolver__DuplicateResolver(address)",
-                address(executingResolver1)
-            )
+            abi.encodeWithSignature("PluginResolver__DuplicateResolver(address)", address(executingResolver1))
         );
         pluginResolver.addExecutingResolver(executingResolver1);
 
@@ -164,8 +144,7 @@ contract PluginResolverTest is Test {
         pluginResolver.addValidatingResolver(validatingResolver1);
         pluginResolver.addValidatingResolver(validatingResolver2);
 
-        IValidatingResolver[] memory resolvers = pluginResolver
-            .getValidatingResolvers();
+        IValidatingResolver[] memory resolvers = pluginResolver.getValidatingResolvers();
         assertEq(resolvers.length, 2);
         assertEq(address(resolvers[0]), address(validatingResolver1));
         assertEq(address(resolvers[1]), address(validatingResolver2));
@@ -178,8 +157,7 @@ contract PluginResolverTest is Test {
         pluginResolver.addExecutingResolver(executingResolver1);
         pluginResolver.addExecutingResolver(executingResolver2);
 
-        IExecutingResolver[] memory resolvers = pluginResolver
-            .getExecutingResolvers();
+        IExecutingResolver[] memory resolvers = pluginResolver.getExecutingResolvers();
         assertEq(resolvers.length, 2);
         assertEq(address(resolvers[0]), address(executingResolver1));
         assertEq(address(resolvers[1]), address(executingResolver2));
@@ -189,17 +167,13 @@ contract PluginResolverTest is Test {
 
     function test_RevertWhen_NonOwnerAddsValidatingResolver() public {
         vm.prank(user);
-        vm.expectRevert(
-            abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", user)
-        );
+        vm.expectRevert(abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", user));
         pluginResolver.addValidatingResolver(validatingResolver1);
     }
 
     function test_RevertWhen_NonOwnerAddsExecutingResolver() public {
         vm.prank(user);
-        vm.expectRevert(
-            abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", user)
-        );
+        vm.expectRevert(abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", user));
         pluginResolver.addExecutingResolver(executingResolver1);
     }
 
@@ -208,9 +182,7 @@ contract PluginResolverTest is Test {
         pluginResolver.addExecutingResolver(executingResolver1);
 
         vm.prank(user);
-        vm.expectRevert(
-            abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", user)
-        );
+        vm.expectRevert(abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", user));
         pluginResolver.removeExecutingResolver(executingResolver1);
     }
 
@@ -219,55 +191,29 @@ contract PluginResolverTest is Test {
         pluginResolver.addValidatingResolver(validatingResolver1);
 
         vm.prank(user);
-        vm.expectRevert(
-            abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", user)
-        );
+        vm.expectRevert(abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", user));
         pluginResolver.removeValidatingResolver(validatingResolver1);
     }
 
     function test_RevertWhen_AddingZeroAddressValidatingResolver() public {
         vm.prank(owner);
-        vm.expectRevert(
-            abi.encodeWithSignature(
-                "PluginResolver__InvalidResolver(address)",
-                address(0)
-            )
-        );
-        pluginResolver.addValidatingResolver(
-            MockValidatingResolver(address(0))
-        );
+        vm.expectRevert(abi.encodeWithSignature("PluginResolver__InvalidResolver(address)", address(0)));
+        pluginResolver.addValidatingResolver(MockValidatingResolver(address(0)));
     }
 
     function test_RevertWhen_AddingZeroAddressExecutingResolver() public {
         vm.prank(owner);
-        vm.expectRevert(
-            abi.encodeWithSignature(
-                "PluginResolver__InvalidResolver(address)",
-                address(0)
-            )
-        );
+        vm.expectRevert(abi.encodeWithSignature("PluginResolver__InvalidResolver(address)", address(0)));
         pluginResolver.addExecutingResolver(MockExecutingResolver(address(0)));
     }
 
     function test_RevertWhen_IndexOutOfBoundsValidatingResolver() public {
-        vm.expectRevert(
-            abi.encodeWithSignature(
-                "PluginResolver__IndexOutOfBounds(uint256,uint256)",
-                0,
-                0
-            )
-        );
+        vm.expectRevert(abi.encodeWithSignature("PluginResolver__IndexOutOfBounds(uint256,uint256)", 0, 0));
         pluginResolver.getValidatingResolverAt(0);
     }
 
     function test_RevertWhen_IndexOutOfBoundsExecutingResolver() public {
-        vm.expectRevert(
-            abi.encodeWithSignature(
-                "PluginResolver__IndexOutOfBounds(uint256,uint256)",
-                0,
-                0
-            )
-        );
+        vm.expectRevert(abi.encodeWithSignature("PluginResolver__IndexOutOfBounds(uint256,uint256)", 0, 0));
         pluginResolver.getExecutingResolverAt(0);
     }
 
@@ -353,10 +299,7 @@ contract PluginResolverTest is Test {
         emit Attested(address(0), owner, 0x0, schemaUid);
         // Expect the ExecutingResolverFailed event to be emitted
         vm.expectEmit(true, true, false, true);
-        emit ExecutingResolverFailed(
-            IExecutingResolver(executingResolver1),
-            true
-        );
+        emit ExecutingResolverFailed(IExecutingResolver(executingResolver1), true);
         bytes32 uid = eas.attest(request); // This should trigger the Attested event
 
         // Assert that the executing resolver's attest call count is still 0
@@ -387,10 +330,8 @@ contract PluginResolverTest is Test {
 
         bytes32 uid = eas.attest(attestRequest);
 
-        RevocationRequest memory request = RevocationRequest({
-            schema: schemaUid,
-            data: RevocationRequestData({uid: uid, value: 0})
-        });
+        RevocationRequest memory request =
+            RevocationRequest({schema: schemaUid, data: RevocationRequestData({uid: uid, value: 0})});
 
         eas.revoke(request);
         assertEq(executingResolver1.revokeCallCount(), 1);
@@ -424,10 +365,8 @@ contract PluginResolverTest is Test {
 
         validatingResolver1.setShouldValidate(false);
 
-        RevocationRequest memory request = RevocationRequest({
-            schema: schemaUid,
-            data: RevocationRequestData({uid: uid, value: 0})
-        });
+        RevocationRequest memory request =
+            RevocationRequest({schema: schemaUid, data: RevocationRequestData({uid: uid, value: 0})});
 
         vm.expectRevert(EAS.InvalidRevocation.selector);
         eas.revoke(request);
@@ -461,20 +400,15 @@ contract PluginResolverTest is Test {
 
         executingResolver1.setShouldRevert(true);
 
-        RevocationRequest memory request = RevocationRequest({
-            schema: schemaUid,
-            data: RevocationRequestData({uid: uid, value: 0})
-        });
+        RevocationRequest memory request =
+            RevocationRequest({schema: schemaUid, data: RevocationRequestData({uid: uid, value: 0})});
 
         // Expect the Attested event to be emitted
         vm.expectEmit(true, true, true, false);
         emit Revoked(address(0), owner, uid, schemaUid);
         // Expect the ExecutingResolverFailed event to be emitted
         vm.expectEmit(true, true, false, true);
-        emit ExecutingResolverFailed(
-            IExecutingResolver(executingResolver1),
-            false
-        );
+        emit ExecutingResolverFailed(IExecutingResolver(executingResolver1), false);
 
         eas.revoke(request);
         assertEq(executingResolver1.revokeCallCount(), 0);

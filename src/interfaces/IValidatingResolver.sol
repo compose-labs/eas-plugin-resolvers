@@ -12,10 +12,7 @@ interface IValidatingResolver {
     ///     usually hold that msg.value != value, since msg.value aggregated the sent ETH amounts for all the
     ///     attestations in the batch.
     /// @return Whether the attestation is valid.
-    function onAttest(
-        Attestation calldata attestation,
-        uint256 value
-    ) external returns (bool);
+    function onAttest(Attestation calldata attestation, uint256 value) external returns (bool);
 
     /// @notice A resolver callback that should be called by the plugin resolver.
     /// @param attestation The existing attestation to be revoked.
@@ -24,8 +21,5 @@ interface IValidatingResolver {
     ///     usually hold that msg.value != value, since msg.value aggregated the sent ETH amounts for all the
     ///     attestations in the batch.
     /// @return Whether the attestation can be revoked.
-    function onRevoke(
-        Attestation calldata attestation,
-        uint256 value
-    ) external returns (bool);
+    function onRevoke(Attestation calldata attestation, uint256 value) external returns (bool);
 }

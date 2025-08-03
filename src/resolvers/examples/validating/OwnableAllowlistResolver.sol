@@ -19,10 +19,7 @@ contract OwnableAllowlistResolver is Ownable2Step, IValidatingResolver {
 
     ////////////////////////////// Constructor //////////////////////////////
 
-    constructor(
-        address _owner,
-        address[] memory _allowedAddresses
-    ) Ownable(_owner) {
+    constructor(address _owner, address[] memory _allowedAddresses) Ownable(_owner) {
         for (uint256 i = 0; i < _allowedAddresses.length; i++) {
             s_allowedAddresses.add(_allowedAddresses[i]);
         }
@@ -40,17 +37,11 @@ contract OwnableAllowlistResolver is Ownable2Step, IValidatingResolver {
 
     //////////////////////////////// Validating Resolver //////////////////////////////
 
-    function onAttest(
-        Attestation calldata attestation,
-        uint256 /* value */
-    ) external view returns (bool) {
+    function onAttest(Attestation calldata attestation, uint256 /* value */ ) external view returns (bool) {
         return isAllowed(attestation.attester);
     }
 
-    function onRevoke(
-        Attestation calldata /* attestation */,
-        uint256 /* value */
-    ) external pure returns (bool) {
+    function onRevoke(Attestation calldata, /* attestation */ uint256 /* value */ ) external pure returns (bool) {
         return true;
     }
 

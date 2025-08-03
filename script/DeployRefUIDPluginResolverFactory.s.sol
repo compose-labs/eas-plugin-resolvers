@@ -12,9 +12,6 @@ contract DeployRefUidPluginResolverFactory is Script {
         vm.startBroadcast();
         RefUidPluginResolverFactory refUidPluginResolverFactory = new RefUidPluginResolverFactory();
         vm.stopBroadcast();
-        console2.log(
-            "RefUidPluginResolverFactory address: ",
-            address(refUidPluginResolverFactory)
-        );
+        console2.log("RefUidPluginResolverFactory address: ", address(refUidPluginResolverFactory));
     }
 }

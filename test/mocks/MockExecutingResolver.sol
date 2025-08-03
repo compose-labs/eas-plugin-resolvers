@@ -42,4 +42,4 @@ contract MockExecutingResolver is IExecutingResolver {
         lastAttestValue = false;
         lastRevokeValue = false;
     }
-} 
+}

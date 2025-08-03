@@ -31,24 +31,15 @@ contract TokenResolver is IValidatingResolver {
 
     //////////////////////////////// Validating Resolver //////////////////////////////
 
-    function onAttest(
-        Attestation calldata attestation,
-        uint256 /* value */
-    ) external view returns (bool) {
-        if (
-            I_TARGET_TOKEN.allowance(attestation.attester, address(this)) <
-            I_TARGET_AMOUNT
-        ) {
+    function onAttest(Attestation calldata attestation, uint256 /* value */ ) external view returns (bool) {
+        if (I_TARGET_TOKEN.allowance(attestation.attester, address(this)) < I_TARGET_AMOUNT) {
             revert InvalidAllowance();
         }
 
         return true;
     }
 
-    function onRevoke(
-        Attestation calldata /* attestation */,
-        uint256 /* value */
-    ) external pure returns (bool) {
+    function onRevoke(Attestation calldata, /* attestation */ uint256 /* value */ ) external pure returns (bool) {
         return true;
     }
 }

@@ -26,17 +26,11 @@ contract ImmutableAllowlistResolver is IValidatingResolver {
 
     //////////////////////////////// Validating Resolver //////////////////////////////
 
-    function onAttest(
-        Attestation calldata attestation,
-        uint256 /* value */
-    ) external view returns (bool) {
+    function onAttest(Attestation calldata attestation, uint256 /* value */ ) external view returns (bool) {
         return isAllowed(attestation.attester);
     }
 
-    function onRevoke(
-        Attestation calldata /* attestation */,
-        uint256 /* value */
-    ) external pure returns (bool) {
+    function onRevoke(Attestation calldata, /* attestation */ uint256 /* value */ ) external pure returns (bool) {
         return true;
     }
 

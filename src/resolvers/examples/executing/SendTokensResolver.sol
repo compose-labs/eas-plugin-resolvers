@@ -43,25 +43,15 @@ contract SendTokensResolver is IExecutingResolver {
 
     //////////////////////////////// Executing Resolver //////////////////////////////
 
-    function onAttest(
-        Attestation calldata attestation,
-        uint256 /* value */
-    ) external {
+    function onAttest(Attestation calldata attestation, uint256 /* value */ ) external {
         // Ensure the attester is not address(0)
         if (attestation.attester == address(0)) revert InvalidFromAddress();
 
-        I_TARGET_TOKEN.safeTransferFrom(
-            I_FROM_ADDRESS,
-            attestation.attester,
-            I_TARGET_AMOUNT
-        );
+        I_TARGET_TOKEN.safeTransferFrom(I_FROM_ADDRESS, attestation.attester, I_TARGET_AMOUNT);
         emit TokensSent(attestation.attester, I_TARGET_AMOUNT);
     }
 
-    function onRevoke(
-        Attestation calldata /* attestation */,
-        uint256 /* value */
-    ) external pure {}
+    function onRevoke(Attestation calldata, /* attestation */ uint256 /* value */ ) external pure {}
 
     ////////////////////////////// Getters //////////////////////////////
 

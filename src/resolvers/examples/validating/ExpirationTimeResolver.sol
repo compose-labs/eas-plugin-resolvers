@@ -21,17 +21,11 @@ contract ExpirationTimeResolver is IValidatingResolver {
 
     //////////////////////////////// Validating Resolver //////////////////////////////
 
-    function onAttest(
-        Attestation calldata attestation,
-        uint256 /* value */
-    ) external view returns (bool) {
+    function onAttest(Attestation calldata attestation, uint256 /* value */ ) external view returns (bool) {
         return attestation.expirationTime >= I_VALID_AFTER;
     }
 
-    function onRevoke(
-        Attestation calldata /* attestation */,
-        uint256 /* value */
-    ) external pure returns (bool) {
+    function onRevoke(Attestation calldata, /* attestation */ uint256 /* value */ ) external pure returns (bool) {
         return true;
     }
 }

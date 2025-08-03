@@ -18,12 +18,7 @@ import {IPluginResolver} from "./interfaces/IPluginResolver.sol";
  * @author Kyle Kaplan
  * @dev PluginResolver to add an array of validating and executing resolver contracts onAttest and onRevoke
  */
-contract PluginResolver is
-    Semver,
-    Ownable2Step,
-    SchemaResolver,
-    IPluginResolver
-{
+contract PluginResolver is Semver, Ownable2Step, SchemaResolver, IPluginResolver {
     using EnumerableValidatingResolverSet for EnumerableValidatingResolverSet.Set;
     using EnumerableExecutingResolverSet for EnumerableExecutingResolverSet.Set;
 
@@ -43,28 +38,24 @@ contract PluginResolver is
      * @param _owner The address of the owner of the PluginResolver
      * @param _catchExecutingResolverErrors Flag to catch or not catch errors from executing resolvers
      */
-    constructor(
-        address _owner,
-        address _eas,
-        bool _catchExecutingResolverErrors
-    ) Semver(0, 0, 1) SchemaResolver(IEAS(_eas)) Ownable(_owner) {
+    constructor(address _owner, address _eas, bool _catchExecutingResolverErrors)
+        Semver(0, 0, 1)
+        SchemaResolver(IEAS(_eas))
+        Ownable(_owner)
+    {
         s_catchExecutingResolverErrors = _catchExecutingResolverErrors;
     }
 
     ////////////////////////////// External Functions //////////////////////////////
 
     /// @inheritdoc IPluginResolver
-    function setCatchExecutingResolverErrors(
-        bool catchErrors
-    ) external onlyOwner {
+    function setCatchExecutingResolverErrors(bool catchErrors) external onlyOwner {
         s_catchExecutingResolverErrors = catchErrors;
         emit CatchExecutingResolverErrorsSet(catchErrors);
     }
 
     /// @inheritdoc IPluginResolver
-    function addValidatingResolver(
-        IValidatingResolver resolver
-    ) external onlyOwner {
+    function addValidatingResolver(IValidatingResolver resolver) external onlyOwner {
         if (address(resolver) == address(0)) {
             revert PluginResolver__InvalidResolver(address(resolver));
         }
@@ -75,9 +66,7 @@ contract PluginResolver is
     }
 
     /// @inheritdoc IPluginResolver
-    function removeValidatingResolver(
-        IValidatingResolver resolver
-    ) external onlyOwner {
+    function removeValidatingResolver(IValidatingResolver resolver) external onlyOwner {
         if (!s_validatingResolvers.remove(resolver)) {
             revert PluginResolver__InvalidResolver(address(resolver));
         }
@@ -85,9 +74,7 @@ contract PluginResolver is
     }
 
     /// @inheritdoc IPluginResolver
-    function addExecutingResolver(
-        IExecutingResolver resolver
-    ) external onlyOwner {
+    function addExecutingResolver(IExecutingResolver resolver) external onlyOwner {
         if (address(resolver) == address(0)) {
             revert PluginResolver__InvalidResolver(address(resolver));
         }
@@ -98,9 +85,7 @@ contract PluginResolver is
     }
 
     /// @inheritdoc IPluginResolver
-    function removeExecutingResolver(
-        IExecutingResolver resolver
-    ) external onlyOwner {
+    function removeExecutingResolver(IExecutingResolver resolver) external onlyOwner {
         if (!s_executingResolvers.remove(resolver)) {
             revert PluginResolver__InvalidResolver(address(resolver));
         }
@@ -118,14 +103,9 @@ contract PluginResolver is
     }
 
     /// @inheritdoc IPluginResolver
-    function getValidatingResolverAt(
-        uint256 index
-    ) external view returns (IValidatingResolver) {
+    function getValidatingResolverAt(uint256 index) external view returns (IValidatingResolver) {
         if (index >= s_validatingResolvers.length()) {
-            revert PluginResolver__IndexOutOfBounds(
-                index,
-                s_validatingResolvers.length()
-            );
+            revert PluginResolver__IndexOutOfBounds(index, s_validatingResolvers.length());
         }
         return s_validatingResolvers.at(index);
     }
@@ -133,11 +113,7 @@ contract PluginResolver is
     /// @notice Returns all validating resolver addresses for off-chain enumeration
     /// @dev This function is intended for off-chain use as iterating over a dynamic array can be gas intensive
     /// @return Array of all validating resolver addresses
-    function getValidatingResolvers()
-        external
-        view
-        returns (IValidatingResolver[] memory)
-    {
+    function getValidatingResolvers() external view returns (IValidatingResolver[] memory) {
         return s_validatingResolvers.values();
     }
 
@@ -147,14 +123,9 @@ contract PluginResolver is
     }
 
     /// @inheritdoc IPluginResolver
-    function getExecutingResolverAt(
-        uint256 index
-    ) external view returns (IExecutingResolver) {
+    function getExecutingResolverAt(uint256 index) external view returns (IExecutingResolver) {
         if (index >= s_executingResolvers.length()) {
-            revert PluginResolver__IndexOutOfBounds(
-                index,
-                s_executingResolvers.length()
-            );
+            revert PluginResolver__IndexOutOfBounds(index, s_executingResolvers.length());
         }
         return s_executingResolvers.at(index);
     }
@@ -162,11 +133,7 @@ contract PluginResolver is
     /// @notice Returns all executing resolver addresses for off-chain enumeration
     /// @dev This function is intended for off-chain use as iterating over a dynamic array can be gas intensive
     /// @return Array of all executing resolver addresses
-    function getExecutingResolvers()
-        external
-        view
-        returns (IExecutingResolver[] memory)
-    {
+    function getExecutingResolvers() external view returns (IExecutingResolver[] memory) {
         return s_executingResolvers.values();
     }
 
@@ -178,10 +145,7 @@ contract PluginResolver is
     /// @dev This function is called by the EAS contract when an attestation is made and protected by the onlyEAS modifier
     /// @param attestation The attestation to validate
     /// @param value The value of the attestation
-    function onAttest(
-        Attestation calldata attestation,
-        uint256 value
-    ) internal override returns (bool) {
+    function onAttest(Attestation calldata attestation, uint256 value) internal override returns (bool) {
         // iterate over validatingResolvers and call onAttest on each
         uint256 validatingResolversLength = s_validatingResolvers.length();
         for (uint256 i = 0; i < validatingResolversLength; i++) {
@@ -197,10 +161,7 @@ contract PluginResolver is
                     // Execution successful, continue to the next resolver
                 } catch {
                     // Emit event with the address of the failed executing resolver
-                    emit ExecutingResolverFailed(
-                        s_executingResolvers.at(i),
-                        true
-                    );
+                    emit ExecutingResolverFailed(s_executingResolvers.at(i), true);
                 }
             } else {
                 // Don't catch errors, let them bubble up
@@ -216,10 +177,7 @@ contract PluginResolver is
     /// @dev This function is called by the EAS contract when an attestation is revoked and protected by the onlyEAS modifier
     /// @param attestation The attestation to revoke
     /// @param value The value of the attestation
-    function onRevoke(
-        Attestation calldata attestation,
-        uint256 value
-    ) internal override returns (bool) {
+    function onRevoke(Attestation calldata attestation, uint256 value) internal override returns (bool) {
         // iterate over validatingResolvers and call onRevoke on each
         uint256 validatingResolversLength = s_validatingResolvers.length();
         for (uint256 i = 0; i < validatingResolversLength; i++) {
@@ -235,10 +193,7 @@ contract PluginResolver is
                     // Execution successful, continue to the next resolver
                 } catch {
                     // Emit event with the address of the failed executing resolver
-                    emit ExecutingResolverFailed(
-                        s_executingResolvers.at(i),
-                        false
-                    );
+                    emit ExecutingResolverFailed(s_executingResolvers.at(i), false);
                 }
             } else {
                 // Don't catch errors, let them bubble up

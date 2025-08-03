@@ -21,10 +21,7 @@ library EnumerableValidatingResolverSet {
      * Returns true if the value was added to the set, that is if it was not
      * already present.
      */
-    function add(
-        Set storage set,
-        IValidatingResolver value
-    ) internal returns (bool) {
+    function add(Set storage set, IValidatingResolver value) internal returns (bool) {
         return set._inner.add(bytes32(uint256(uint160(address(value)))));
     }
 
@@ -34,20 +31,14 @@ library EnumerableValidatingResolverSet {
      * Returns true if the value was removed from the set, that is if it was
      * present.
      */
-    function remove(
-        Set storage set,
-        IValidatingResolver value
-    ) internal returns (bool) {
+    function remove(Set storage set, IValidatingResolver value) internal returns (bool) {
         return set._inner.remove(bytes32(uint256(uint160(address(value)))));
     }
 
     /**
      * @dev Returns true if the value is in the set. O(1).
      */
-    function contains(
-        Set storage set,
-        IValidatingResolver value
-    ) internal view returns (bool) {
+    function contains(Set storage set, IValidatingResolver value) internal view returns (bool) {
         return set._inner.contains(bytes32(uint256(uint160(address(value)))));
     }
 
@@ -68,14 +59,8 @@ library EnumerableValidatingResolverSet {
      *
      * - `index` must be strictly less than {length}.
      */
-    function at(
-        Set storage set,
-        uint256 index
-    ) internal view returns (IValidatingResolver) {
-        return
-            IValidatingResolver(
-                address(uint160(uint256(set._inner.at(index))))
-            );
+    function at(Set storage set, uint256 index) internal view returns (IValidatingResolver) {
+        return IValidatingResolver(address(uint160(uint256(set._inner.at(index)))));
     }
 
     /**
@@ -86,18 +71,12 @@ library EnumerableValidatingResolverSet {
      * this function has an unbounded cost, and using it as part of a state-changing function may render the function
      * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.
      */
-    function values(
-        Set storage set
-    ) internal view returns (IValidatingResolver[] memory) {
+    function values(Set storage set) internal view returns (IValidatingResolver[] memory) {
         bytes32[] memory store = set._inner.values();
-        IValidatingResolver[] memory result = new IValidatingResolver[](
-            store.length
-        );
+        IValidatingResolver[] memory result = new IValidatingResolver[](store.length);
 
         for (uint256 i = 0; i < store.length; i++) {
-            result[i] = IValidatingResolver(
-                address(uint160(uint256(store[i])))
-            );
+            result[i] = IValidatingResolver(address(uint160(uint256(store[i]))));
         }
 
         return result;

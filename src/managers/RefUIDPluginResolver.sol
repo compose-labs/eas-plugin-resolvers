@@ -33,8 +33,7 @@ contract RefUidPluginResolver is Semver, SchemaResolver, IRefUidPluginResolver {
     // a flag to make sure the INTENDED_SCHEMA_UID is only set once
     bool private schemaSet = false;
     // a mapping to store the PluginResolver for each refUid
-    mapping(bytes32 refUid => PluginResolver pluginResolver)
-        public refUidToPluginResolver;
+    mapping(bytes32 refUid => PluginResolver pluginResolver) public refUidToPluginResolver;
 
     ////////////////////////////// Constructor //////////////////////////////
 
@@ -52,17 +51,11 @@ contract RefUidPluginResolver is Semver, SchemaResolver, IRefUidPluginResolver {
     }
 
     /// @inheritdoc IRefUidPluginResolver
-    function setRefUidToPluginResolver(
-        bytes32 refUid,
-        PluginResolver pluginResolver
-    ) external {
+    function setRefUidToPluginResolver(bytes32 refUid, PluginResolver pluginResolver) external {
         Attestation memory attestation = _eas.getAttestation(refUid);
         // make sure attester is msg.sender
         if (attestation.attester != msg.sender) {
-            revert RefUidPluginResolver__Unauthorized(
-                msg.sender,
-                attestation.attester
-            );
+            revert RefUidPluginResolver__Unauthorized(msg.sender, attestation.attester);
         }
         refUidToPluginResolver[refUid] = pluginResolver;
         emit RefUidToPluginResolverSet(refUid, pluginResolver);
@@ -75,65 +68,38 @@ contract RefUidPluginResolver is Semver, SchemaResolver, IRefUidPluginResolver {
     ///     loops through the executingResolvers and calls onAttest on each
     /// @param attestation The attestation to validate
     /// @param value The value of the attestation
-    function onAttest(
-        Attestation calldata attestation,
-        uint256 value
-    ) internal override returns (bool) {
+    function onAttest(Attestation calldata attestation, uint256 value) internal override returns (bool) {
         // make sure the attestation is coming from the the intended schema (make sure someone didn't put this resolver contract on an unintended schema)
         if (attestation.schema != INTENDED_SCHEMA_UID) {
-            revert RefUidPluginResolver__InvalidSchema(
-                attestation.schema,
-                INTENDED_SCHEMA_UID
-            );
+            revert RefUidPluginResolver__InvalidSchema(attestation.schema, INTENDED_SCHEMA_UID);
         }
         // use the refUid to find the pluginResolver
-        PluginResolver pluginResolver = refUidToPluginResolver[
-            attestation.refUID
-        ];
+        PluginResolver pluginResolver = refUidToPluginResolver[attestation.refUID];
         // if the pluginResolver is not set, just return true to let the attestation go through
         if (address(pluginResolver) == address(0)) {
             return true;
         }
         // iterate over validatingResolvers and call onAttest on each. If any fail, return false
-        uint256 validatingResolversLength = pluginResolver
-            .getValidatingResolversLength();
+        uint256 validatingResolversLength = pluginResolver.getValidatingResolversLength();
         for (uint256 i = 0; i < validatingResolversLength; i++) {
-            if (
-                !pluginResolver.getValidatingResolverAt(i).onAttest(
-                    attestation,
-                    value
-                )
-            ) {
+            if (!pluginResolver.getValidatingResolverAt(i).onAttest(attestation, value)) {
                 return false;
             }
         }
         // iterate over executingResolvers and call onAttest on each
         // if the catchExecutingResolverErrors flag is set, catch the errors and return true
-        bool catchExecutingResolverErrors = pluginResolver
-            .getCatchExecutingResolverErrors();
-        uint256 executingResolversLength = pluginResolver
-            .getExecutingResolversLength();
+        bool catchExecutingResolverErrors = pluginResolver.getCatchExecutingResolverErrors();
+        uint256 executingResolversLength = pluginResolver.getExecutingResolversLength();
         for (uint256 i = 0; i < executingResolversLength; i++) {
             if (catchExecutingResolverErrors) {
-                try
-                    pluginResolver.getExecutingResolverAt(i).onAttest(
-                        attestation,
-                        value
-                    )
-                {
+                try pluginResolver.getExecutingResolverAt(i).onAttest(attestation, value) {
                     // Execution successful, continue to the next resolver
                 } catch {
                     // Emit event with the address of the failed executing resolver
-                    emit ExecutingResolverFailed(
-                        pluginResolver.getExecutingResolverAt(i),
-                        true
-                    );
+                    emit ExecutingResolverFailed(pluginResolver.getExecutingResolverAt(i), true);
                 }
             } else {
-                pluginResolver.getExecutingResolverAt(i).onAttest(
-                    attestation,
-                    value
-                );
+                pluginResolver.getExecutingResolverAt(i).onAttest(attestation, value);
             }
         }
         return true;
@@ -144,65 +110,38 @@ contract RefUidPluginResolver is Semver, SchemaResolver, IRefUidPluginResolver {
     ///     loops through the executingResolvers and calls onRevoke on each
     /// @param attestation The attestation to revoke
     /// @param value The value of the attestation
-    function onRevoke(
-        Attestation calldata attestation,
-        uint256 value
-    ) internal override returns (bool) {
+    function onRevoke(Attestation calldata attestation, uint256 value) internal override returns (bool) {
         // make sure the attestation is coming from the the intended schema (make sure someone didn't put this resolver contract on an unintended schema)
         if (attestation.schema != INTENDED_SCHEMA_UID) {
-            revert RefUidPluginResolver__InvalidSchema(
-                attestation.schema,
-                INTENDED_SCHEMA_UID
-            );
+            revert RefUidPluginResolver__InvalidSchema(attestation.schema, INTENDED_SCHEMA_UID);
         }
         // use the refUid to find the pluginResolver
-        PluginResolver pluginResolver = refUidToPluginResolver[
-            attestation.refUID
-        ];
+        PluginResolver pluginResolver = refUidToPluginResolver[attestation.refUID];
         // if the pluginResolver is not set, just return true to let the revoke go through
         if (address(pluginResolver) == address(0)) {
             return true;
         }
         // iterate over validatingResolvers and call onRevoke on each. If any fail, return false
-        uint256 validatingResolversLength = pluginResolver
-            .getValidatingResolversLength();
+        uint256 validatingResolversLength = pluginResolver.getValidatingResolversLength();
         for (uint256 i = 0; i < validatingResolversLength; i++) {
-            if (
-                !pluginResolver.getValidatingResolverAt(i).onRevoke(
-                    attestation,
-                    value
-                )
-            ) {
+            if (!pluginResolver.getValidatingResolverAt(i).onRevoke(attestation, value)) {
                 return false;
             }
         }
         // iterate over executingResolvers and call onRevoke on each
         // if the catchExecutingResolverErrors flag is set, catch the errors and return true
-        bool catchExecutingResolverErrors = pluginResolver
-            .getCatchExecutingResolverErrors();
-        uint256 executingResolversLength = pluginResolver
-            .getExecutingResolversLength();
+        bool catchExecutingResolverErrors = pluginResolver.getCatchExecutingResolverErrors();
+        uint256 executingResolversLength = pluginResolver.getExecutingResolversLength();
         for (uint256 i = 0; i < executingResolversLength; i++) {
             if (catchExecutingResolverErrors) {
-                try
-                    pluginResolver.getExecutingResolverAt(i).onRevoke(
-                        attestation,
-                        value
-                    )
-                {
+                try pluginResolver.getExecutingResolverAt(i).onRevoke(attestation, value) {
                     // Execution successful, continue to the next resolver
                 } catch {
                     // Emit event with the address of the failed executing resolver
-                    emit ExecutingResolverFailed(
-                        pluginResolver.getExecutingResolverAt(i),
-                        false
-                    );
+                    emit ExecutingResolverFailed(pluginResolver.getExecutingResolverAt(i), false);
                 }
             } else {
-                pluginResolver.getExecutingResolverAt(i).onRevoke(
-                    attestation,
-                    value
-                );
+                pluginResolver.getExecutingResolverAt(i).onRevoke(attestation, value);
             }
         }
         return true;

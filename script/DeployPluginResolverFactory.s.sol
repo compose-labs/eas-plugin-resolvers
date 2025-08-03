@@ -11,9 +11,6 @@ contract DeployPluginResolverFactory is Script {
         vm.startBroadcast();
         PluginResolverFactory pluginResolverFactory = new PluginResolverFactory();
         vm.stopBroadcast();
-        console2.log(
-            "PluginResolverFactory address: ",
-            address(pluginResolverFactory)
-        );
+        console2.log("PluginResolverFactory address: ", address(pluginResolverFactory));
     }
 }
