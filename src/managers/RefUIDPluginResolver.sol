@@ -28,6 +28,7 @@ contract RefUidPluginResolver is Semver, SchemaResolver, IRefUidPluginResolver {
     ////////////////////////////// State //////////////////////////////
 
     // the schemaUid that this resolver is intended to be set on
+    /// forge-lint: disable-next-line(mixed-case-variable)
     bytes32 public INTENDED_SCHEMA_UID;
     // a flag to make sure the INTENDED_SCHEMA_UID is only set once
     bool private schemaSet = false;
