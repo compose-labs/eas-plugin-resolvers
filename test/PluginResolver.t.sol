@@ -3,8 +3,7 @@
 pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";
-import {SchemaResolver} from "eas-contracts/resolver/SchemaResolver.sol";
-import {IEAS, EAS, Attestation} from "eas-contracts/EAS.sol";
+import {EAS, Attestation} from "eas-contracts/EAS.sol";
 import {AttestationRequest, RevocationRequest, AttestationRequestData, RevocationRequestData} from "eas-contracts/IEAS.sol";
 
 import {PluginResolver} from "../src/PluginResolver.sol";

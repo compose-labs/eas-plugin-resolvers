@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.28;
 
-import {Script, console} from "forge-std/Script.sol";
-import {SchemaRegistry, ISchemaResolver} from "eas-contracts/SchemaRegistry.sol";
+import {Script} from "forge-std/Script.sol";
+import {SchemaRegistry} from "eas-contracts/SchemaRegistry.sol";
 import {IEAS, EAS} from "eas-contracts/EAS.sol";
 
 import {PluginResolver} from "../src/PluginResolver.sol";
