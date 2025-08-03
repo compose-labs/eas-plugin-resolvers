@@ -24,7 +24,7 @@ contract PluginResolverTest is Test {
     HelperConfig public helperConfig;
     address public owner;
     address public user;
-    bytes32 public schemaUID;
+    bytes32 public schemaUid;
 
     event ValidatingResolverAdded(address indexed resolver);
     event ValidatingResolverRemoved(address indexed resolver);
@@ -38,13 +38,13 @@ contract PluginResolverTest is Test {
         address indexed recipient,
         address indexed attester,
         bytes32 uid,
-        bytes32 indexed schemaUID
+        bytes32 indexed schemaUid
     );
     event Revoked(
         address indexed recipient,
         address indexed attester,
         bytes32 uid,
-        bytes32 indexed schemaUID
+        bytes32 indexed schemaUid
     );
 
     function setUp() public {
@@ -57,7 +57,7 @@ contract PluginResolverTest is Test {
 
         HelperConfig.NetworkConfig memory config = helperConfig.getConfig();
         eas = EAS(config.eas);
-        schemaUID = config.schemaUID;
+        schemaUid = config.schemaUid;
         owner = config.account; // Update owner to be the account from config
 
         // Deploy mock resolvers
@@ -280,7 +280,7 @@ contract PluginResolverTest is Test {
         vm.stopPrank();
 
         AttestationRequest memory request = AttestationRequest({
-            schema: schemaUID,
+            schema: schemaUid,
             data: AttestationRequestData({
                 recipient: address(0),
                 expirationTime: 0,
@@ -307,7 +307,7 @@ contract PluginResolverTest is Test {
         validatingResolver1.setShouldValidate(false);
 
         AttestationRequest memory request = AttestationRequest({
-            schema: schemaUID,
+            schema: schemaUid,
             data: AttestationRequestData({
                 recipient: address(0),
                 expirationTime: 0,
@@ -335,7 +335,7 @@ contract PluginResolverTest is Test {
 
         // Prepare the attestation request
         AttestationRequest memory request = AttestationRequest({
-            schema: schemaUID,
+            schema: schemaUid,
             data: AttestationRequestData({
                 recipient: address(0),
                 expirationTime: 0,
@@ -350,7 +350,7 @@ contract PluginResolverTest is Test {
         vm.prank(owner);
         // Expect the Attested event to be emitted
         vm.expectEmit(true, true, true, false);
-        emit Attested(address(0), owner, 0x0, schemaUID);
+        emit Attested(address(0), owner, 0x0, schemaUid);
         // Expect the ExecutingResolverFailed event to be emitted
         vm.expectEmit(true, true, false, true);
         emit ExecutingResolverFailed(
@@ -374,7 +374,7 @@ contract PluginResolverTest is Test {
         pluginResolver.addExecutingResolver(executingResolver2);
 
         AttestationRequest memory attestRequest = AttestationRequest({
-            schema: schemaUID,
+            schema: schemaUid,
             data: AttestationRequestData({
                 recipient: address(0),
                 expirationTime: 0,
@@ -388,7 +388,7 @@ contract PluginResolverTest is Test {
         bytes32 uid = eas.attest(attestRequest);
 
         RevocationRequest memory request = RevocationRequest({
-            schema: schemaUID,
+            schema: schemaUid,
             data: RevocationRequestData({uid: uid, value: 0})
         });
 
@@ -409,7 +409,7 @@ contract PluginResolverTest is Test {
         pluginResolver.addExecutingResolver(executingResolver1);
 
         AttestationRequest memory attestRequest = AttestationRequest({
-            schema: schemaUID,
+            schema: schemaUid,
             data: AttestationRequestData({
                 recipient: address(0),
                 expirationTime: 0,
@@ -425,7 +425,7 @@ contract PluginResolverTest is Test {
         validatingResolver1.setShouldValidate(false);
 
         RevocationRequest memory request = RevocationRequest({
-            schema: schemaUID,
+            schema: schemaUid,
             data: RevocationRequestData({uid: uid, value: 0})
         });
 
@@ -446,7 +446,7 @@ contract PluginResolverTest is Test {
         pluginResolver.addExecutingResolver(executingResolver1);
 
         AttestationRequest memory attestRequest = AttestationRequest({
-            schema: schemaUID,
+            schema: schemaUid,
             data: AttestationRequestData({
                 recipient: address(0),
                 expirationTime: 0,
@@ -462,13 +462,13 @@ contract PluginResolverTest is Test {
         executingResolver1.setShouldRevert(true);
 
         RevocationRequest memory request = RevocationRequest({
-            schema: schemaUID,
+            schema: schemaUid,
             data: RevocationRequestData({uid: uid, value: 0})
         });
 
         // Expect the Attested event to be emitted
         vm.expectEmit(true, true, true, false);
-        emit Revoked(address(0), owner, uid, schemaUID);
+        emit Revoked(address(0), owner, uid, schemaUid);
         // Expect the ExecutingResolverFailed event to be emitted
         vm.expectEmit(true, true, false, true);
         emit ExecutingResolverFailed(

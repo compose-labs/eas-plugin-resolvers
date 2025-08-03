@@ -38,13 +38,13 @@ interface IRefUIDPluginResolver is ISchemaResolver {
         address expectedSender
     );
 
-    error RefUIDPluginResolver__SchemaUIDAlreadySet();
+    error RefUIDPluginResolver__SchemaUidAlreadySet();
 
     ////////////////////////////// Functions //////////////////////////////
 
     /// @notice Sets the intended schema UID
-    /// @param _intendedSchemaUID The intended schema UID
-    function setIntendedSchemaUID(bytes32 _intendedSchemaUID) external;
+    /// @param _intendedSchemaUid The intended schema UID
+    function setIntendedSchemaUid(bytes32 _intendedSchemaUid) external;
 
     /// @notice Sets the refUID to the pluginResolver
     /// @param refUID The refUID to set

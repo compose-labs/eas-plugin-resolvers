@@ -27,7 +27,7 @@ import {Semver} from "../utils/Semver.sol";
 contract RefUIDPluginResolver is Semver, SchemaResolver, IRefUIDPluginResolver {
     ////////////////////////////// State //////////////////////////////
 
-    // the schemaUID that this resolver is intended to be set on
+    // the schemaUid that this resolver is intended to be set on
     bytes32 public INTENDED_SCHEMA_UID;
     // a flag to make sure the INTENDED_SCHEMA_UID is only set once
     bool private schemaSet = false;
@@ -42,11 +42,11 @@ contract RefUIDPluginResolver is Semver, SchemaResolver, IRefUIDPluginResolver {
     ////////////////////////////// External Functions //////////////////////////////
 
     /// @inheritdoc IRefUIDPluginResolver
-    function setIntendedSchemaUID(bytes32 _intendedSchemaUID) external {
+    function setIntendedSchemaUid(bytes32 _intendedSchemaUid) external {
         if (schemaSet) {
-            revert RefUIDPluginResolver__SchemaUIDAlreadySet();
+            revert RefUIDPluginResolver__SchemaUidAlreadySet();
         }
-        INTENDED_SCHEMA_UID = _intendedSchemaUID;
+        INTENDED_SCHEMA_UID = _intendedSchemaUid;
         schemaSet = true;
     }
 

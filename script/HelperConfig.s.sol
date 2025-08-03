@@ -23,7 +23,7 @@ contract HelperConfig is CodeConstants, Script {
     ////////////////////////////// Types //////////////////////////////
     struct NetworkConfig {
         address eas;
-        bytes32 schemaUID;
+        bytes32 schemaUid;
         PluginResolver pluginResolver;
         address account;
     }
@@ -69,7 +69,7 @@ contract HelperConfig is CodeConstants, Script {
     {
         sepoliaNetworkConfig = NetworkConfig({
             eas: 0xC2679fBD37d54388Ce493F1DB75320D236e1815e,
-            schemaUID: bytes32(0), // todo
+            schemaUid: bytes32(0), // todo
             pluginResolver: PluginResolver(payable(address(0))), // todo
             account: address(0) // todo
         });
@@ -97,12 +97,12 @@ contract HelperConfig is CodeConstants, Script {
         );
 
         // Register the schema with the registry and get its UID
-        bytes32 _schemaUID = registry.register(schema, resolver, revocable);
+        bytes32 _schemaUid = registry.register(schema, resolver, revocable);
         vm.stopBroadcast();
 
         // Create and store the local network configuration
         localNetworkConfig = NetworkConfig({
-            schemaUID: _schemaUID,
+            schemaUid: _schemaUid,
             eas: address(_eas),
             pluginResolver: resolver,
             account: FOUNDRY_DEFAULT_SENDER
