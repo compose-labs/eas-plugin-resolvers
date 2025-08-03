@@ -3,7 +3,7 @@
 pragma solidity 0.8.28;
 
 import {Script, console2} from "forge-std/Script.sol";
-import "../src/managers/RefUIDPluginResolverFactory.sol";
+import {RefUIDPluginResolverFactory} from "../src/managers/RefUIDPluginResolverFactory.sol";
 
 contract DeployRefUIDPluginResolverFactory is Script {
     function setUp() public {}
