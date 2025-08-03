@@ -2,25 +2,25 @@
 
 pragma solidity 0.8.28;
 
-import {RefUIDPluginResolver} from "./RefUIDPluginResolver.sol";
+import {RefUidPluginResolver} from "./RefUidPluginResolver.sol";
 
 /**
- * @title RefUIDPluginResolverFactory
- * @dev RefUIDPluginResolverFactory contract to deploy RefUIDPluginResolvers using CREATE2
+ * @title RefUidPluginResolverFactory
+ * @dev RefUidPluginResolverFactory contract to deploy RefUidPluginResolvers using CREATE2
  */
-contract RefUIDPluginResolverFactory {
-    RefUIDPluginResolver[] public contracts;
+contract RefUidPluginResolverFactory {
+    RefUidPluginResolver[] public contracts;
 
     event ResolverDeployed(
         address indexed deployer,
-        RefUIDPluginResolver indexed deployedContract
+        RefUidPluginResolver indexed deployedContract
     );
 
     function deploy(
         bytes32 _salt,
         address _eas
-    ) external returns (RefUIDPluginResolver) {
-        RefUIDPluginResolver resolver = new RefUIDPluginResolver{salt: _salt}(
+    ) external returns (RefUidPluginResolver) {
+        RefUidPluginResolver resolver = new RefUidPluginResolver{salt: _salt}(
             _eas
         );
         contracts.push(resolver);
@@ -51,6 +51,6 @@ contract RefUIDPluginResolverFactory {
     }
 
     function getBytecode() public pure returns (bytes memory) {
-        return abi.encodePacked(type(RefUIDPluginResolver).creationCode);
+        return abi.encodePacked(type(RefUidPluginResolver).creationCode);
     }
 }

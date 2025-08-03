@@ -3,18 +3,18 @@
 pragma solidity 0.8.28;
 
 import {Script, console2} from "forge-std/Script.sol";
-import {RefUIDPluginResolverFactory} from "../src/managers/RefUIDPluginResolverFactory.sol";
+import {RefUidPluginResolverFactory} from "../src/managers/RefUidPluginResolverFactory.sol";
 
-contract DeployRefUIDPluginResolverFactory is Script {
+contract DeployRefUidPluginResolverFactory is Script {
     function setUp() public {}
 
     function run() public {
         vm.startBroadcast();
-        RefUIDPluginResolverFactory refUIDPluginResolverFactory = new RefUIDPluginResolverFactory();
+        RefUidPluginResolverFactory refUidPluginResolverFactory = new RefUidPluginResolverFactory();
         vm.stopBroadcast();
         console2.log(
-            "RefUIDPluginResolverFactory address: ",
-            address(refUIDPluginResolverFactory)
+            "RefUidPluginResolverFactory address: ",
+            address(refUidPluginResolverFactory)
         );
     }
 }

@@ -8,15 +8,15 @@ import {PluginResolver} from "../../PluginResolver.sol";
 import {IExecutingResolver} from "../../interfaces/IExecutingResolver.sol";
 
 /**
- * @title IRefUIDPluginResolver
+ * @title IRefUidPluginResolver
  * @dev Interface for the PluginResolver contract which manages an array of validating and executing resolver contracts
  */
-interface IRefUIDPluginResolver is ISchemaResolver {
+interface IRefUidPluginResolver is ISchemaResolver {
     ////////////////////////////// Events //////////////////////////////
 
-    /// @notice Emitted when the refUID to pluginResolver mapping is set
-    event RefUIDToPluginResolverSet(
-        bytes32 indexed refUID,
+    /// @notice Emitted when the refUid to pluginResolver mapping is set
+    event RefUidToPluginResolverSet(
+        bytes32 indexed refUid,
         PluginResolver indexed pluginResolver
     );
 
@@ -28,17 +28,17 @@ interface IRefUIDPluginResolver is ISchemaResolver {
 
     ////////////////////////////// Errors //////////////////////////////
 
-    error RefUIDPluginResolver__InvalidSchema(
+    error RefUidPluginResolver__InvalidSchema(
         bytes32 providedSchema,
         bytes32 expectedSchema
     );
 
-    error RefUIDPluginResolver__Unauthorized(
+    error RefUidPluginResolver__Unauthorized(
         address providedSender,
         address expectedSender
     );
 
-    error RefUIDPluginResolver__SchemaUidAlreadySet();
+    error RefUidPluginResolver__SchemaUidAlreadySet();
 
     ////////////////////////////// Functions //////////////////////////////
 
@@ -46,11 +46,11 @@ interface IRefUIDPluginResolver is ISchemaResolver {
     /// @param _intendedSchemaUid The intended schema UID
     function setIntendedSchemaUid(bytes32 _intendedSchemaUid) external;
 
-    /// @notice Sets the refUID to the pluginResolver
-    /// @param refUID The refUID to set
+    /// @notice Sets the refUid to the pluginResolver
+    /// @param refUid The refUid to set
     /// @param pluginResolver The pluginResolver to set
-    function setRefUIDToPluginResolver(
-        bytes32 refUID,
+    function setRefUidToPluginResolver(
+        bytes32 refUid,
         PluginResolver pluginResolver
     ) external;
 }
