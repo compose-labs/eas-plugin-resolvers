@@ -9,8 +9,7 @@ contract DeployRefUIDPluginResolverFactory is Script {
     function setUp() public {}
 
     function run() public {
-        uint256 privateKey = vm.envUint("PRIVATE_KEY");
-        vm.startBroadcast(privateKey);
+        vm.startBroadcast();
         RefUIDPluginResolverFactory refUIDPluginResolverFactory = new RefUIDPluginResolverFactory();
         vm.stopBroadcast();
         console2.log(

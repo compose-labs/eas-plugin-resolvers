@@ -7,9 +7,9 @@ import {Attestation} from "eas-contracts/IEAS.sol";
 
 import {IValidatingResolver} from "../../../interfaces/IValidatingResolver.sol";
 
-/// @title AllowlistResolver
+/// @title ImmutableAllowlistResolver
 /// @notice A sample validating resolver that checks whether the attester is in the allowlist.
-contract AllowlistResolver is IValidatingResolver {
+contract ImmutableAllowlistResolver is IValidatingResolver {
     using EnumerableSet for EnumerableSet.AddressSet;
 
     ////////////////////////////// State //////////////////////////////
