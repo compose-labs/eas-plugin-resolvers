@@ -12,4 +12,7 @@ base_goerli = "https://goerli.base.org"
 base = { key = "${BLOCK_EXPLORER_API_KEY}" }
 base_sepolia = { key = "${BLOCK_EXPLORER_API_KEY}" }
 
+[lint]
+exclude_lints = ["asm-keccak256", "mixed-case-variable"]
+
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
