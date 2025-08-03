@@ -11,12 +11,12 @@ import {IValidatingResolver} from "../../../interfaces/IValidatingResolver.sol";
 contract ExpirationTimeResolver is IValidatingResolver {
     ////////////////////////////// State //////////////////////////////
 
-    uint256 private immutable _validAfter;
+    uint256 private immutable I_VALID_AFTER;
 
     ////////////////////////////// Constructor //////////////////////////////
 
     constructor(uint256 validAfter) {
-        _validAfter = validAfter;
+        I_VALID_AFTER = validAfter;
     }
 
     //////////////////////////////// Validating Resolver //////////////////////////////
@@ -25,7 +25,7 @@ contract ExpirationTimeResolver is IValidatingResolver {
         Attestation calldata attestation,
         uint256 /* value */
     ) external view returns (bool) {
-        return attestation.expirationTime >= _validAfter;
+        return attestation.expirationTime >= I_VALID_AFTER;
     }
 
     function onRevoke(

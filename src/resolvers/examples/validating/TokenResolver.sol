@@ -19,14 +19,14 @@ contract TokenResolver is IValidatingResolver {
 
     ////////////////////////////// State //////////////////////////////
 
-    IERC20 private immutable _targetToken;
-    uint256 private immutable _targetAmount;
+    IERC20 private immutable I_TARGET_TOKEN;
+    uint256 private immutable I_TARGET_AMOUNT;
 
     ////////////////////////////// Constructor //////////////////////////////
 
     constructor(IERC20 targetToken, uint256 targetAmount) {
-        _targetToken = targetToken;
-        _targetAmount = targetAmount;
+        I_TARGET_TOKEN = targetToken;
+        I_TARGET_AMOUNT = targetAmount;
     }
 
     //////////////////////////////// Validating Resolver //////////////////////////////
@@ -36,8 +36,8 @@ contract TokenResolver is IValidatingResolver {
         uint256 /* value */
     ) external view returns (bool) {
         if (
-            _targetToken.allowance(attestation.attester, address(this)) <
-            _targetAmount
+            I_TARGET_TOKEN.allowance(attestation.attester, address(this)) <
+            I_TARGET_AMOUNT
         ) {
             revert InvalidAllowance();
         }

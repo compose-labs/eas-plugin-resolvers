@@ -25,9 +25,9 @@ contract SendTokensResolver is IExecutingResolver {
 
     ////////////////////////////// State //////////////////////////////
 
-    IERC20 private immutable _targetToken;
-    uint256 private immutable _targetAmount;
-    address private immutable _fromAddress;
+    IERC20 private immutable I_TARGET_TOKEN;
+    uint256 private immutable I_TARGET_AMOUNT;
+    address private immutable I_FROM_ADDRESS;
 
     ////////////////////////////// Constructor //////////////////////////////
 
@@ -36,9 +36,9 @@ contract SendTokensResolver is IExecutingResolver {
         if (targetAmount == 0) revert InvalidAmount();
         if (fromAddress == address(0)) revert InvalidFromAddress();
 
-        _targetToken = targetToken;
-        _targetAmount = targetAmount;
-        _fromAddress = fromAddress;
+        I_TARGET_TOKEN = targetToken;
+        I_TARGET_AMOUNT = targetAmount;
+        I_FROM_ADDRESS = fromAddress;
     }
 
     //////////////////////////////// Executing Resolver //////////////////////////////
@@ -50,12 +50,12 @@ contract SendTokensResolver is IExecutingResolver {
         // Ensure the attester is not address(0)
         if (attestation.attester == address(0)) revert InvalidFromAddress();
 
-        _targetToken.safeTransferFrom(
-            _fromAddress,
+        I_TARGET_TOKEN.safeTransferFrom(
+            I_FROM_ADDRESS,
             attestation.attester,
-            _targetAmount
+            I_TARGET_AMOUNT
         );
-        emit TokensSent(attestation.attester, _targetAmount);
+        emit TokensSent(attestation.attester, I_TARGET_AMOUNT);
     }
 
     function onRevoke(
@@ -67,16 +67,16 @@ contract SendTokensResolver is IExecutingResolver {
 
     /// @notice Returns the token that will be transferred
     function getTargetToken() external view returns (IERC20) {
-        return _targetToken;
+        return I_TARGET_TOKEN;
     }
 
     /// @notice Returns the amount of tokens that will be transferred
     function getTargetAmount() external view returns (uint256) {
-        return _targetAmount;
+        return I_TARGET_AMOUNT;
     }
 
     /// @notice Returns the address tokens will be transferred from
     function getFromAddress() external view returns (address) {
-        return _fromAddress;
+        return I_FROM_ADDRESS;
     }
 }
