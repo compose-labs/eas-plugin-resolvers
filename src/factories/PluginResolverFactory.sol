@@ -17,10 +17,12 @@ contract PluginResolverFactory {
     );
 
     /// @notice Deploys a new PluginResolver contract
-    /// @param _owner The owner of the new resolver. If address(0), msg.sender is used
     /// @param _salt The salt for CREATE2 deployment
+    /// @param _owner The owner of the new resolver. If address(0), msg.sender is used
+    /// @param _eas The EAS contract address
+    /// @param _catchExecutingResolverErrors Whether to catch executing resolver errors
     /// @return The newly deployed PluginResolver contract
-    function deploy(address _owner, bytes32 _salt, address _eas, bool _catchExecutingResolverErrors)
+    function deploy(bytes32 _salt, address _owner, address _eas, bool _catchExecutingResolverErrors)
         external
         returns (PluginResolver)
     {
